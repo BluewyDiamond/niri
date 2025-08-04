@@ -367,6 +367,18 @@ impl ResolvedWindowRules {
                 if let Some(x) = rule.tiled_state {
                     resolved.tiled_state = Some(x);
                 }
+
+                if let Some(x) = rule.suppress_focus {
+                    resolved.suppress_focus = Some(x);
+                }
+
+                if let Some(x) = rule.suppress_fullscreen {
+                    resolved.suppress_fullscreen = Some(x);
+                }
+
+                if let Some(x) = rule.suppress_maximize {
+                    resolved.suppress_maximize = Some(x);
+                }
             }
 
             resolved.open_on_output = open_on_output.map(|x| x.to_owned());

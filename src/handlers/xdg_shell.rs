@@ -43,7 +43,7 @@ use crate::input::resize_grab::ResizeGrab;
 use crate::input::touch_move_grab::TouchMoveGrab;
 use crate::input::touch_resize_grab::TouchResizeGrab;
 use crate::input::{PointerOrTouchStartData, DOUBLE_CLICK_TIME};
-use crate::layout::ActivateWindow;
+use crate::layout::{ActivateWindow, LayoutElement};
 use crate::niri::{CastTarget, PopupGrabState, State};
 use crate::utils::transaction::Transaction;
 use crate::utils::{
@@ -430,8 +430,10 @@ impl XdgShellHandler for State {
             .layout
             .find_window_and_output_mut(surface.wl_surface())
         {
-            if mapped.wants_suppress_maximize() {
-                return;
+            if let Some(suppress_maximize) = mapped.rules().suppress_maximize {
+                if suppress_maximize {
+                    return;
+                }
             }
 
             // FIXME
@@ -450,8 +452,10 @@ impl XdgShellHandler for State {
             .layout
             .find_window_and_output_mut(surface.wl_surface())
         {
-            if mapped.wants_suppress_maximize() {
-                return;
+            if let Some(suppress_maximize) = mapped.rules().suppress_maximize {
+                if suppress_maximize {
+                    return;
+                }
             }
 
             // FIXME
@@ -474,8 +478,10 @@ impl XdgShellHandler for State {
             // changes.
             mapped.set_needs_configure();
 
-            if mapped.wants_suppress_fullscreen() {
-                return;
+            if let Some(suppress_fullscreen) = mapped.rules().suppress_fullscreen {
+                if suppress_fullscreen {
+                    return;
+                }
             }
 
             let window = mapped.window.clone();
@@ -561,8 +567,10 @@ impl XdgShellHandler for State {
             // changes.
             mapped.set_needs_configure();
 
-            if mapped.wants_suppress_fullscreen() {
-                return;
+            if let Some(suppress_fullscreen) = mapped.rules().suppress_fullscreen {
+                if suppress_fullscreen {
+                    return;
+                }
             }
 
             let window = mapped.window.clone();

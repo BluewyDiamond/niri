@@ -77,7 +77,7 @@ use smithay::{
 
 pub use crate::handlers::xdg_shell::KdeDecorationsModeState;
 use crate::layout::workspace::WorkspaceId;
-use crate::layout::ActivateWindow;
+use crate::layout::{ActivateWindow, LayoutElement};
 use crate::niri::{DndIcon, NewClient, State};
 use crate::protocols::ext_workspace::{self, ExtWorkspaceHandler, ExtWorkspaceManagerState};
 use crate::protocols::foreign_toplevel::{
@@ -802,9 +802,11 @@ impl XdgActivationHandler for State {
     ) {
         if token_data.timestamp.elapsed() < XDG_ACTIVATION_TOKEN_TIMEOUT {
             if let Some((mapped, _)) = self.niri.layout.find_window_and_output_mut(&surface) {
-                if mapped.wants_suppress_focus() {
-                    self.niri.activation_state.remove_token(&token);
-                    return;
+                if let Some(suppress_focus) = mapped.rules().suppress_focus {
+                    if suppress_focus {
+                        self.niri.activation_state.remove_token(&token);
+                        return;
+                    }
                 }
 
                 let window = mapped.window.clone();
