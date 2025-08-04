@@ -934,6 +934,7 @@ impl State {
             // Set a fullscreen state based on window request and window rule.
             if (wants_fullscreen.is_some() && rules.open_fullscreen.is_none())
                 || rules.open_fullscreen == Some(true)
+                || rules.open_windowed_fullscreen == Some(true)
             {
                 toplevel.with_pending_state(|state| {
                     state.states.set(xdg_toplevel::State::Fullscreen);

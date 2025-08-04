@@ -12,6 +12,7 @@ use smithay::wayland::shell::xdg::{
     SurfaceCachedState, ToplevelSurface, XdgToplevelSurfaceRoleAttributes,
 };
 
+use crate::layout::LayoutElement;
 use crate::utils::with_toplevel_role;
 
 pub mod mapped;
@@ -61,6 +62,9 @@ pub struct ResolvedWindowRules {
 
     /// Whether the window should open fullscreen.
     pub open_fullscreen: Option<bool>,
+
+    /// Wheter the window should open windowed fullscreend.
+    pub open_windowed_fullscreen: Option<bool>,
 
     /// Whether the window should open floating.
     pub open_floating: Option<bool>,
@@ -160,6 +164,20 @@ impl<'a> WindowRef<'a> {
         }
     }
 
+    pub fn is_fullscreen(self) -> bool {
+        match self {
+            WindowRef::Unmapped(_) => false,
+            WindowRef::Mapped(mapped) => mapped.is_fullscreen(),
+        }
+    }
+
+    pub fn is_windowed_fullscreen(self) -> bool {
+        match self {
+            WindowRef::Unmapped(_) => false,
+            WindowRef::Mapped(mapped) => mapped.is_windowed_fullscreen(),
+        }
+    }
+
     pub fn is_window_cast_target(self) -> bool {
         match self {
             WindowRef::Unmapped(_) => false,
@@ -179,6 +197,7 @@ impl ResolvedWindowRules {
             open_on_workspace: None,
             open_maximized: None,
             open_fullscreen: None,
+            open_windowed_fullscreen: None,
             open_floating: None,
             open_focused: None,
             min_width: None,
@@ -300,6 +319,10 @@ impl ResolvedWindowRules {
 
                 if let Some(x) = rule.open_fullscreen {
                     resolved.open_fullscreen = Some(x);
+                }
+
+                if let Some(x) = rule.open_windowed_fullscreen {
+                    resolved.open_windowed_fullscreen = Some(x)
                 }
 
                 if let Some(x) = rule.open_floating {
@@ -482,6 +505,18 @@ fn window_matches(window: WindowRef, role: &XdgToplevelSurfaceRoleAttributes, m:
 
     if let Some(is_floating) = m.is_floating {
         if window.is_floating() != is_floating {
+            return false;
+        }
+    }
+
+    if let Some(is_fullscreen) = m.is_fullscreen {
+        if window.is_fullscreen() != is_fullscreen {
+            return false;
+        }
+    }
+
+    if let Some(is_windowed_fullscreen) = m.is_windowed_fullscreen {
+        if window.is_windowed_fullscreen() != is_windowed_fullscreen {
             return false;
         }
     }
