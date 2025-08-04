@@ -114,6 +114,15 @@ pub struct ResolvedWindowRules {
 
     /// Override whether to set the Tiled xdg-toplevel state on the window.
     pub tiled_state: Option<bool>,
+
+    /// Whether to ignore fullscreen event.
+    pub suppress_fullscreen: Option<bool>,
+
+    /// Whether to ignore maximize event.
+    pub suppress_maximize: Option<bool>,
+
+    /// Whether to ignore focus event.
+    pub suppress_focus: Option<bool>,
 }
 
 impl<'a> WindowRef<'a> {
@@ -234,6 +243,9 @@ impl ResolvedWindowRules {
             variable_refresh_rate: None,
             scroll_factor: None,
             tiled_state: None,
+            suppress_fullscreen: None,
+            suppress_maximize: None,
+            suppress_focus: None,
         }
     }
 

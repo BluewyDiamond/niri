@@ -160,6 +160,15 @@ pub struct Mapped {
     /// These have been "sent" to the window in form of configures, but the window hadn't committed
     /// in response yet.
     uncommitted_windowed_fullscreen: Vec<(Serial, bool)>,
+
+    /// Whether to ignore fullscreen window event.
+    suppress_fullscreen: bool,
+
+    // Whether to ignore maximize window event.
+    suppress_maximize: bool,
+
+    // Whether to ignore focus window event.
+    suppress_focus: bool,
 }
 
 niri_render_elements! {
@@ -253,6 +262,9 @@ impl Mapped {
             is_windowed_fullscreen: false,
             is_pending_windowed_fullscreen: false,
             uncommitted_windowed_fullscreen: Vec::new(),
+            suppress_fullscreen: false,
+            suppress_maximize: false,
+            suppress_focus: false,
         }
     }
 
@@ -529,6 +541,30 @@ impl Mapped {
 
     pub fn is_urgent(&self) -> bool {
         self.is_urgent
+    }
+
+    pub fn wants_suppress_fullscreen(&self) -> bool {
+        self.suppress_fullscreen
+    }
+
+    pub fn set_suppress_fullscreen(&mut self, suppress_fullscreen: bool) {
+        self.suppress_fullscreen = suppress_fullscreen
+    }
+
+    pub fn wants_suppress_maximize(&self) -> bool {
+        self.suppress_maximize
+    }
+
+    pub fn set_suppress_maximize(&mut self, suppress_maximize: bool) {
+        self.suppress_maximize = suppress_maximize
+    }
+
+    pub fn wants_suppress_focus(&self) -> bool {
+        self.suppress_focus
+    }
+
+    pub fn set_suppress_focus(&mut self, suppress_focus: bool) {
+        self.suppress_focus = suppress_focus
     }
 }
 

@@ -425,17 +425,37 @@ impl XdgShellHandler for State {
     }
 
     fn maximize_request(&mut self, surface: ToplevelSurface) {
-        // FIXME
+        if let Some((mapped, _)) = self
+            .niri
+            .layout
+            .find_window_and_output_mut(surface.wl_surface())
+        {
+            if mapped.wants_suppress_maximize() {
+                return;
+            }
 
-        // A configure is required in response to this event. However, if an initial configure
-        // wasn't sent, then we will send this as part of the initial configure later.
-        if surface.is_initial_configure_sent() {
-            surface.send_configure();
+            // FIXME
+
+            // A configure is required in response to this event. However, if an initial configure
+            // wasn't sent, then we will send this as part of the initial configure later.
+            if surface.is_initial_configure_sent() {
+                surface.send_configure();
+            }
         }
     }
 
-    fn unmaximize_request(&mut self, _surface: ToplevelSurface) {
-        // FIXME
+    fn unmaximize_request(&mut self, surface: ToplevelSurface) {
+        if let Some((mapped, _)) = self
+            .niri
+            .layout
+            .find_window_and_output_mut(surface.wl_surface())
+        {
+            if mapped.wants_suppress_maximize() {
+                return;
+            }
+
+            // FIXME
+        }
     }
 
     fn fullscreen_request(
@@ -453,6 +473,10 @@ impl XdgShellHandler for State {
             // A configure is required in response to this event regardless if there are pending
             // changes.
             mapped.set_needs_configure();
+
+            if mapped.wants_suppress_fullscreen() {
+                return;
+            }
 
             let window = mapped.window.clone();
 
@@ -536,6 +560,10 @@ impl XdgShellHandler for State {
             // A configure is required in response to this event regardless if there are pending
             // changes.
             mapped.set_needs_configure();
+
+            if mapped.wants_suppress_fullscreen() {
+                return;
+            }
 
             let window = mapped.window.clone();
             self.niri.layout.set_fullscreen(&window, false);

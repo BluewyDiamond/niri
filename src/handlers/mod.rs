@@ -802,6 +802,11 @@ impl XdgActivationHandler for State {
     ) {
         if token_data.timestamp.elapsed() < XDG_ACTIVATION_TOKEN_TIMEOUT {
             if let Some((mapped, _)) = self.niri.layout.find_window_and_output_mut(&surface) {
+                if mapped.wants_suppress_focus() {
+                    self.niri.activation_state.remove_token(&token);
+                    return;
+                }
+
                 let window = mapped.window.clone();
                 if token_data.user_data.get::<UrgentOnlyMarker>().is_some() {
                     mapped.set_urgent(true);

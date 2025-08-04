@@ -1467,6 +1467,12 @@ pub struct WindowRule {
     pub scroll_factor: Option<FloatOrInt<0, 100>>,
     #[knuffel(child, unwrap(argument))]
     pub tiled_state: Option<bool>,
+    #[knuffel(child, unwrap(argument))]
+    pub suppress_fullscreen: Option<bool>,
+    #[knuffel(child, unwrap(argument))]
+    pub suppress_maximize: Option<bool>,
+    #[knuffel(child, unwrap(argument))]
+    pub suppress_focus: Option<bool>,
 }
 
 #[derive(knuffel::Decode, Debug, Default, Clone, PartialEq)]
