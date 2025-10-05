@@ -1187,6 +1187,12 @@ pub struct Window {
     ///
     /// There can be either one focused window or zero (e.g. when a layer-shell surface has focus).
     pub is_focused: bool,
+    /// Whether this window is fullscreen.
+    pub is_fullscreen: bool,
+    /// Whether this window is windowed fullscreen.
+    pub is_windowed_fullscreen: bool,
+    /// Whether this window is maximized.
+    pub is_maxmized: bool,
     /// Whether this window is currently floating.
     ///
     /// If the window isn't floating then it is in the tiling layout.

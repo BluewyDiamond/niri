@@ -85,6 +85,12 @@ pub struct Match {
     #[knuffel(property)]
     pub is_active_in_column: Option<bool>,
     #[knuffel(property)]
+    pub is_fullscreen: Option<bool>,
+    #[knuffel(property)]
+    pub is_windowed_fullscreen: Option<bool>,
+    #[knuffel(property)]
+    pub is_maximized: Option<bool>,
+    #[knuffel(property)]
     pub is_floating: Option<bool>,
     #[knuffel(property)]
     pub is_window_cast_target: Option<bool>,

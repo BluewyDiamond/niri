@@ -162,6 +162,27 @@ impl<'a> WindowRef<'a> {
         }
     }
 
+    pub fn is_fullscreen(self) -> bool {
+        match self {
+            WindowRef::Unmapped(_) => false,
+            WindowRef::Mapped(mapped) => mapped.is_fullscreen(),
+        }
+    }
+
+    pub fn is_windowed_fullscreen(self) -> bool {
+        match self {
+            WindowRef::Unmapped(_) => false,
+            WindowRef::Mapped(mapped) => mapped.is_windowed_fullscreen(),
+        }
+    }
+
+    pub fn is_maximized(self) -> bool {
+        match self {
+            WindowRef::Unmapped(_) => false,
+            WindowRef::Mapped(mapped) => mapped.is_maximized(),
+        }
+    }
+
     pub fn is_window_cast_target(self) -> bool {
         match self {
             WindowRef::Unmapped(_) => false,
@@ -478,6 +499,24 @@ fn window_matches(window: WindowRef, role: &XdgToplevelSurfaceRoleAttributes, m:
 
     if let Some(is_active_in_column) = m.is_active_in_column {
         if window.is_active_in_column() != is_active_in_column {
+            return false;
+        }
+    }
+
+    if let Some(is_fullscreen) = m.is_fullscreen {
+        if window.is_fullscreen() != is_fullscreen {
+            return false;
+        }
+    }
+
+    if let Some(is_windowed_fullscreen) = m.is_windowed_fullscreen {
+        if window.is_windowed_fullscreen() != is_windowed_fullscreen {
+            return false;
+        }
+    }
+
+    if let Some(is_maximized) = m.is_maximized {
+        if window.is_maximized() != is_maximized {
             return false;
         }
     }

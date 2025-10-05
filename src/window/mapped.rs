@@ -89,6 +89,12 @@ pub struct Mapped {
     /// Whether this window is the active window in its column.
     is_active_in_column: bool,
 
+    // Whether this window is fullscreen.
+    is_fullscreen: bool,
+
+    // Whether this window is maximized.
+    is_maximized: bool,
+
     /// Whether this window is floating.
     is_floating: bool,
 
@@ -241,6 +247,8 @@ impl Mapped {
             is_urgent: false,
             is_focused: false,
             is_active_in_column: true,
+            is_fullscreen: false,
+            is_maximized: false,
             is_floating: false,
             is_window_cast_target: false,
             ignore_opacity_window_rule: false,
@@ -316,6 +324,14 @@ impl Mapped {
 
     pub fn is_active_in_column(&self) -> bool {
         self.is_active_in_column
+    }
+
+    pub fn is_fullscreen(&self) -> bool {
+        self.is_fullscreen
+    }
+
+    pub fn is_maximized(&self) -> bool {
+        self.is_maximized
     }
 
     pub fn is_floating(&self) -> bool {
