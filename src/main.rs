@@ -290,6 +290,7 @@ fn import_environment() {
         write!(init_system_import, "dinitctl setenv {variables};").unwrap();
     }
 
+    #[cfg(feature = "dbus")]
     let rv = Command::new("/bin/sh")
         .args([
             "-c",
@@ -302,6 +303,7 @@ fn import_environment() {
         .spawn();
     // Wait for the import process to complete, otherwise services will start too fast without
     // environment variables available.
+    #[cfg(feature = "dbus")]
     match rv {
         Ok(mut child) => match child.wait() {
             Ok(status) => {
